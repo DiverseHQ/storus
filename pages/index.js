@@ -1,3 +1,4 @@
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useTheme } from 'next-themes'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
@@ -19,7 +20,10 @@ export default function Home() {
         <meta name="description" content="Storus - Drive meets IPFS" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Storus - Drive meets IPFS</h1>
+      <div className='flex flex-row justify-between items-center'>
+        <h1 className='text-4xl'>Storus - Drive meets IPFS</h1>
+        <ConnectButton/>
+      </div>
       <button onClick={changeTheme}>Change Theme : {theme}</button>
       </>
   )
