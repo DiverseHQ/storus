@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@metadrive/lib": "^0.1.5",
+    "@metamask/eth-sig-util": "^5.0.0",
+    "@metamask/providers": "^9.1.0",
     "@rainbow-me/rainbowkit": "^0.6.0",
     "ethers": "^5.7.1",
     "next": "12.3.0",

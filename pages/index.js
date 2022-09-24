@@ -1,6 +1,8 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useTheme } from 'next-themes'
 import Head from 'next/head'
+import RegisterButton from '../components/RegisterButton'
+import UploadFile from '../components/UploadFile'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
@@ -25,6 +27,10 @@ export default function Home() {
         <ConnectButton/>
       </div>
       <button onClick={changeTheme}>Change Theme : {theme}</button>
+      <RegisterButton />
+      <section>
+        <UploadFile />
+      </section>
       </>
   )
 }
