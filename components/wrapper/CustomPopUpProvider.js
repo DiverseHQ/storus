@@ -25,10 +25,22 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom
     }
   }, [show])
 
+  console.log(top, left, right, bottom)
+
+  const position = {}
+  if(type === modalType.customposition){
+    position.top = top ? top : 'unset'
+    position.left = left ? left : 'unset'
+    position.right = right ? right : 'unset'
+    position.bottom = bottom ? bottom : 'unset'
+  }
+
+  console.log(position)
+
   if (visiblity )
     return (
       <div className='flex flex-row justify-center items-center fixed z-40 no-scrollbar w-full h-full'>
-        <div className='flex justify-center items-center relative w-full h-full'>
+        <div className={'flex relative w-full h-full ' + (type !== modalType.customposition && 'justify-center items-center')}>
           <div
             className={`w-full h-full absolute ${type !== modalType.customposition && 'bg-t-bg'} z-0`}
             onClick={onBackBtnClick}
@@ -45,7 +57,7 @@ const Modal = ({ type, show, onBackBtnClick, component, top, left, right, bottom
           
           {type === modalType.customposition && (
             <div
-              className={`flex h-fit absolute z-10 ${show ? 'enter-fade-animation' : 'exit-fade-animation '}`}
+              className={`flex h-fit absolute z-10 ${show ? 'enter-animation' : 'exit-animation '}`}
               style={{left, bottom,top, right  }}
             >
               {component}
