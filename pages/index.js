@@ -4,17 +4,11 @@ import Head from 'next/head'
 import RegisterButton from '../components/RegisterButton'
 import UploadFile from '../components/UploadFile'
 import styles from '../styles/Home.module.css'
+import {FiSettings} from 'react-icons/fi'
+import { modalType, usePopUpModal } from '../components/wrapper/CustomPopUpProvider'
+import SettingOption from '../components/SettingOption'
 
 export default function Home() {
-  const { theme, setTheme } = useTheme()
-  const themesArray = ['light', 'dark', 'system']
-  let themeIndex = themesArray.indexOf(theme)
-
-  const changeTheme = () => {
-    themeIndex = (themeIndex + 1)%3
-    setTheme(themesArray[themeIndex])
-  }
-
   return (
     <>
       <Head>
