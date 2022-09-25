@@ -1,9 +1,9 @@
-import {getMetadriveFileContract} from './connectContract';
+// import {connectContract} from './connectContract'
 import {ethers} from 'ethers';
 import {useAccount} from 'wagmi';
 
 export const getPublicKey = async (address) => {
-    const metadriveFileContract = getMetadriveFileContract();
+    // const metadriveFileContract = connectContract();
     const publicKey = await metadriveFileContract.publicKeys(address);
     if (publicKey === ethers.constants.HashZero) {
       return null;
@@ -24,7 +24,8 @@ export const getPublicKey = async (address) => {
   };
 
   export const getFiles = async(address) =>{
-    const metadriveFileContract = getMetadriveFileContract();
+
+    const metadriveFileContract = connectContract();
     const files = await metadriveFileContract.getFileKeys(address);
     console.log("files",files)
     return files;
