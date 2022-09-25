@@ -9,7 +9,7 @@ const ListFiles = () => {
     const [files, setFiles] = useState([]);
 
     useEffect(() => {
-        {address && fetchFiles()};
+        if(address) fetchFiles()
       }, [address]);
     
       const fetchFiles = async () => {
@@ -18,8 +18,8 @@ const ListFiles = () => {
         }
         try {
           const fileInfos = await getFiles(address);
-          console.log(fileInfos)
-          setFiles(fileInfos)
+          console.log("flieInfos",fileInfos)
+          // setFiles(fileInfos)
         } catch (error) {
           console.log(error);
         }

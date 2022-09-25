@@ -7,8 +7,7 @@ import {StateContext} from "../utils/StateContext"
 const RegisterButton = () => {
     const { address, isConnected } = useAccount()
     const [loading, setLoading] = React.useState(false);
-    const {connectedPublicKey} = useContext(StateContext)
-    const [ publicKey, setPublicKey] = connectedPublicKey
+    const {publicKey, setPublicKey} = useContext(StateContext)
 
     const handleRegister = async () => {
         if (!(window.ethereum && isConnected)) {

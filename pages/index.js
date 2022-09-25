@@ -2,7 +2,6 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useTheme } from 'next-themes'
 import Head from 'next/head'
 import RegisterButton from '../components/RegisterButton'
-import UploadFile from '../components/UploadFile'
 import styles from '../styles/Home.module.css'
 import {FiSettings} from 'react-icons/fi'
 import { modalType, usePopUpModal } from '../components/wrapper/CustomPopUpProvider'
@@ -16,18 +15,7 @@ import {useAccount} from 'wagmi'
 export default function Home() {
   const {address} = useAccount();
   const {connectedPublicKey} = useContext(StateContext)
-    const [ publicKey, setPublicKey] = connectedPublicKey
 
-  async function getPublicKey() {
-    const contract = connectContract();
-    const publicKey = await contract.publicKey(address);
-    setPublicKey(publicKey)
-    console.log(publicKey, "public Key pancho")
-    }
-
-    useEffect(() =>{
-        {address && getPublicKey()}
-    },[address])
   
   return (
     <>
@@ -41,7 +29,6 @@ export default function Home() {
       </div>
       {/* <button onClick={changeTheme}>Change Theme : {theme}</button> */}
       <RegisterButton />
-      <UploadFile />
       <ListFiles />
       </>
   )

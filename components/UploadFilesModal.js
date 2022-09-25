@@ -6,6 +6,7 @@ import {StateContext} from "../utils/StateContext"
 import connectContract from '../utils/connectContract';
 import {useAccount} from 'wagmi'
 import { encrypt } from "@metadrive/lib";
+import * as sigUtil from "@metamask/eth-sig-util";
 
 const web3StorageClient = new Web3Storage({
     token: process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN,
@@ -18,19 +19,12 @@ const UploadFilesModal = ({initialFiles}) => {
     const [files, setFiles] = useState(initialFiles)
     const [totalFilesSize, setTotalFilesSize] = useState()
     const [uploadedFilesSize, setUploadedFilesSize] = useState(0)
-    const [ publicKey, setPublicKey] = useState(null)
+    const { publicKey, setPublicKey} = useContext(StateContext)
     const {address} = useAccount();
-    useEffect(()   =>{
-        {address && getPublicKeys()}
-    })
 
-    async function getPublicKeys() {
-        const contract = connectContract();
-        const publicKey = await contract.publicKey(address);
-        setPublicKey(publicKey)
-        console.log(publicKey, "public Key pancho")
-        }
-
+    useEffect(() => {
+        console.log("publicKey",publicKey)
+    }, [publicKey])
 
     const convertSize = (size) => {
         if(size < 1024) return size + ' B'
@@ -54,42 +48,38 @@ const UploadFilesModal = ({initialFiles}) => {
         const onRootCidReady = cid => {
             console.log('uploading files with cid:', cid)
         }
+        
          // when each chunk is stored, update the percentage complete and display
         const totalSize = Array.from(files).map(f => f.size).reduce((a, b) => a + b, 0)
         let uploaded = 0
+
         const onStoredChunk = size => {
-        uploaded += size
-        
-        const pct = 100 * (uploaded / totalSize)
-        console.log(`Uploading... ${pct.toFixed(2)}% complete`)
-        console.log('uploaded', uploaded, 'of', totalSize, 'bytes')
-        console.log(`Uploading... ${uploaded} / ${totalFilesSize}`)
+            uploaded += size
 
-        setUploadedFilesSize(convertSize(uploaded))
+            const pct = 100 * (uploaded / totalSize)
+            console.log(`Uploading... ${pct.toFixed(2)}% complete`)
+            console.log('uploaded', uploaded, 'of', totalSize, 'bytes')
+            console.log(`Uploading... ${uploaded} / ${totalFilesSize}`)
 
+            setUploadedFilesSize(convertSize(uploaded))
         }
-    
-        // makeStorageClient returns an authorized Web3.Storage client instance
-        // console.log('process.evn.ALCHEMY_ID',process.env.NEXT_PUBLIC_ALCHEMY_ID)
-        // console.log('process.env.WEB3_STORAGE_TOKEN',process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN)
-    
-        // client.put will invoke our callbacks during the upload
-        // and return the root cid when the upload completes
-        
         if(!files){
             console.log("Add File to Upload");
             return
           }
-        const fileBuffer = await files.arrayBuffer();
-      const { buffer: encryptedFileBuffer, mnemonic } = await encrypt(
-        new Uint8Array(fileBuffer)
-      );
-      const cid = await web3StorageClient.put(
-        [new File([encryptedFileBuffer], files.name.replace(/\s/g, "_"),{type: files.type})],
-        {
-          wrapWithDirectory: false,
-        }
-      );
+        const fileBuffer = await files[0].arrayBuffer();
+        const { buffer: encryptedFileBuffer, mnemonic } = await encrypt(
+            new Uint8Array(fileBuffer)
+        );
+
+        const cid = await web3StorageClient.put(
+            [new File([encryptedFileBuffer], files[0].name.replace(/\s/g, "_"),{type: files[0].type})],
+            {
+            wrapWithDirectory: false,
+            onRootCidReady, 
+            onStoredChunk
+            }
+        );
       const encryptedSymmetricKey = Buffer.from(
         JSON.stringify(
           sigUtil.encrypt({

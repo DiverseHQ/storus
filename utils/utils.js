@@ -8,6 +8,7 @@ export const getPublicKey = async (address) => {
     if (publicKey === ethers.constants.HashZero) {
       return null;
     } else {
+        console.log("public key",publicKey)
       return hexStringToBuffer(publicKey);
     }
   };
@@ -25,5 +26,6 @@ export const getPublicKey = async (address) => {
   export const getFiles = async(address) =>{
     const metadriveFileContract = getMetadriveFileContract();
     const files = await metadriveFileContract.getFileKeys(address);
+    console.log("files",files)
     return files;
   }
