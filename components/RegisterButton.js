@@ -1,10 +1,15 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import {useAccount} from "wagmi"
 import connectContract from '../utils/connectContract';
+import {StateContext} from "../utils/StateContext"
+
 const RegisterButton = () => {
     const { address, isConnected } = useAccount()
     const [loading, setLoading] = React.useState(false);
+    const {connectedPublicKey} = useContext(StateContext)
+    const [ publicKey, setPublicKey] = connectedPublicKey
+
     const handleRegister = async () => {
         if (!(window.ethereum && isConnected)) {
             return;
@@ -13,16 +18,16 @@ const RegisterButton = () => {
             setLoading(true)
             console.log(address)
             const ethereum = window.ethereum 
-            const pkBase64 = await ethereum.request({
-                method: "eth_getEncryptionPublicKey",
-                params: [address],
-              });
-            const pk = Buffer.from(pkBase64, "base64")
-              const contract = connectContract();
-                const tx = await contract.register(pk);
-                await tx.wait()
-                setLoading(false)
-                console.log(tx);
+            // create a Public Key for an Ethereum address
+            const publicKey = await ethereum.request({
+              method: 'eth_getEncryptionPublicKey',
+              params: [address],
+            });
+            console.log(publicKey)
+            const contract = connectContract();
+            const tx = await contract.register(publicKey);
+            await tx.wait();
+            setLoading(false)
           }
           catch(error){
             console.log(error)

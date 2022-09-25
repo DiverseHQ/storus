@@ -1,31 +1,5 @@
 {"abi": [
 	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "key",
-				"type": "string"
-			}
-		],
-		"name": "addFileKey",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "bytes32",
-				"name": "publicKey",
-				"type": "bytes32"
-			}
-		],
-		"name": "register",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -42,13 +16,31 @@
 			},
 			{
 				"indexed": false,
-				"internalType": "bytes32",
+				"internalType": "string",
 				"name": "publicKey",
-				"type": "bytes32"
+				"type": "string"
 			}
 		],
 		"name": "Register",
 		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_walletAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_fileKey",
+				"type": "string"
+			}
+		],
+		"name": "addFileKeys",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"inputs": [
@@ -82,15 +74,28 @@
 				"type": "address"
 			}
 		],
-		"name": "publicKeys",
+		"name": "publicKey",
 		"outputs": [
 			{
-				"internalType": "bytes32",
+				"internalType": "string",
 				"name": "",
-				"type": "bytes32"
+				"type": "string"
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "encryptedKey",
+				"type": "string"
+			}
+		],
+		"name": "register",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]
