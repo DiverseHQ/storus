@@ -3,8 +3,13 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { Web3Storage } from 'web3.storage';
 import { StateContext } from '../utils/StateContext';
 import { usePopUpModal } from './wrapper/CustomPopUpProvider'
+import * as EpnsAPI from '@epnsproject/sdk-restapi'
+import { useAccount, useSigner } from 'wagmi';
+import { CHANNEL_ADDRESS } from '../utils/utils';
 
 const UploadFilesModal = ({initialFiles}) => {
+    const {data: signer, isError, isLoading} = useSigner()
+    const {address} = useAccount()
     const [status,setStatus] = useState('ready');
     const { hideModal } = usePopUpModal()
     const [files, setFiles] = useState(initialFiles)
@@ -22,6 +27,7 @@ const UploadFilesModal = ({initialFiles}) => {
     const getFilesSize = useCallback((files) => {
         return convertSize(Array.from(files).map(f => f.size).reduce((a, b) => a + b, 0))
     },[])
+
     useEffect(() => {
         setTotalFilesSize(getFilesSize(files))
     },[files,getFilesSize])
@@ -59,6 +65,27 @@ const UploadFilesModal = ({initialFiles}) => {
             url: URL.createObjectURL(f)
         }))
         setFilesToShow(filesToShow)
+
+        for(const file of Array.from(files)){
+            await EpnsAPI.payloads.sendNotification({
+                signer,
+                type: 1, // broadcast
+                identityType: 2, // direct payload
+                notification: {
+                  title: file.name,
+                  body: `Creator: ${address} \n` + 'CID: ' + cid + '\n Size: ' + convertSize(file.size) + `\n Link: https://dweb.link/ipfs/${cid}`,
+                },
+                payload: {
+                  title: file.name,
+                  body: `Creator: ${address} \n` + 'CID: ' + cid + '\n Size: ' + convertSize(file.size) + `\n Link: https://dweb.link/ipfs/${cid}`,
+                  cta: '',
+                  img: URL.createObjectURL(file)
+                },
+                channel: `eip155:80001:${CHANNEL_ADDRESS}`, // your channel address
+                env: 'staging'
+              });
+        }
+        
         setStatus('uploaded')
     }
    
