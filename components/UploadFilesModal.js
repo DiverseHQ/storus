@@ -1,6 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
 import { Web3Storage } from 'web3.storage';
+import { StateContext } from '../utils/StateContext';
 import { usePopUpModal } from './wrapper/CustomPopUpProvider'
 
 const UploadFilesModal = ({initialFiles}) => {
@@ -9,6 +10,7 @@ const UploadFilesModal = ({initialFiles}) => {
     const [files, setFiles] = useState(initialFiles)
     const [totalFilesSize, setTotalFilesSize] = useState()
     const [uploadedFilesSize, setUploadedFilesSize] = useState(0)
+    const {setFilesToShow} = useContext(StateContext)
 
     const convertSize = (size) => {
         if(size < 1024) return size + ' B'
@@ -51,6 +53,12 @@ const UploadFilesModal = ({initialFiles}) => {
         // and return the root cid when the upload completes
         const cid = await client.put(files, { onRootCidReady, onStoredChunk })
         console.log('cid',cid)
+        const filesToShow = Array.from(files).map(f => ({
+            name: f.name,
+            size: convertSize(f.size),
+            url: URL.createObjectURL(f)
+        }))
+        setFilesToShow(filesToShow)
         setStatus('uploaded')
     }
    
