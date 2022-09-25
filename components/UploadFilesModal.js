@@ -1,7 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import { AiOutlineClose } from 'react-icons/ai';
 import { Web3Storage } from 'web3.storage';
 import { usePopUpModal } from './wrapper/CustomPopUpProvider'
+import {StateContext} from "../utils/StateContext"
+import connectContract from '../utils/connectContract';
+import {useAccount} from 'wagmi'
+import { encrypt } from "@metadrive/lib";
+
+const web3StorageClient = new Web3Storage({
+    token: process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN,
+    endpoint: new URL("https://api.web3.storage"),
+  });
 
 const UploadFilesModal = ({initialFiles}) => {
     const [status,setStatus] = useState('ready');
@@ -9,6 +18,19 @@ const UploadFilesModal = ({initialFiles}) => {
     const [files, setFiles] = useState(initialFiles)
     const [totalFilesSize, setTotalFilesSize] = useState()
     const [uploadedFilesSize, setUploadedFilesSize] = useState(0)
+    const [ publicKey, setPublicKey] = useState(null)
+    const {address} = useAccount();
+    useEffect(()   =>{
+        {address && getPublicKeys()}
+    })
+
+    async function getPublicKeys() {
+        const contract = connectContract();
+        const publicKey = await contract.publicKey(address);
+        setPublicKey(publicKey)
+        console.log(publicKey, "public Key pancho")
+        }
+
 
     const convertSize = (size) => {
         if(size < 1024) return size + ' B'
@@ -44,18 +66,49 @@ const UploadFilesModal = ({initialFiles}) => {
         console.log(`Uploading... ${uploaded} / ${totalFilesSize}`)
 
         setUploadedFilesSize(convertSize(uploaded))
+
         }
     
         // makeStorageClient returns an authorized Web3.Storage client instance
-        console.log('process.evn.ALCHEMY_ID',process.env.NEXT_PUBLIC_ALCHEMY_ID)
-        console.log('process.env.WEB3_STORAGE_TOKEN',process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN)
-        const client = new Web3Storage({token: process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN})
+        // console.log('process.evn.ALCHEMY_ID',process.env.NEXT_PUBLIC_ALCHEMY_ID)
+        // console.log('process.env.WEB3_STORAGE_TOKEN',process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN)
     
         // client.put will invoke our callbacks during the upload
         // and return the root cid when the upload completes
-        const cid = await client.put(files, { onRootCidReady, onStoredChunk })
-        console.log('cid',cid)
-        setStatus('uploaded')
+        
+        if(!files){
+            console.log("Add File to Upload");
+            return
+          }
+        const fileBuffer = await files.arrayBuffer();
+      const { buffer: encryptedFileBuffer, mnemonic } = await encrypt(
+        new Uint8Array(fileBuffer)
+      );
+      const cid = await web3StorageClient.put(
+        [new File([encryptedFileBuffer], files.name.replace(/\s/g, "_"),{type: files.type})],
+        {
+          wrapWithDirectory: false,
+        }
+      );
+      const encryptedSymmetricKey = Buffer.from(
+        JSON.stringify(
+          sigUtil.encrypt({
+            publicKey: publicKey.toString("base64"),
+            data: mnemonic,
+            version: "x25519-xsalsa20-poly1305",
+          })
+        )
+      ).toString("hex");
+
+    console.log("encrypted Symmetric Key", encryptedSymmetricKey)
+
+    //Send the encrypted Symmetric Key to the contract
+    const contract = connectContract();
+    const tx = await contract.addFileKeys(address, encryptedSymmetricKey);
+    await tx.wait();
+    console.log("File Uploaded", cid)
+
+    setStatus('uploaded')
     }
    
   return (

@@ -7,9 +7,27 @@ import styles from '../styles/Home.module.css'
 import {FiSettings} from 'react-icons/fi'
 import { modalType, usePopUpModal } from '../components/wrapper/CustomPopUpProvider'
 import SettingOption from '../components/SettingOption'
-
+import ListFiles from '../components/ListFiles'
+import { useContext, useEffect } from 'react'
+import {StateContext} from "../utils/StateContext"
+import connectContract from '../utils/connectContract';
+import {useAccount} from 'wagmi'
 
 export default function Home() {
+  const {address} = useAccount();
+  const {connectedPublicKey} = useContext(StateContext)
+    const [ publicKey, setPublicKey] = connectedPublicKey
+
+  async function getPublicKey() {
+    const contract = connectContract();
+    const publicKey = await contract.publicKey(address);
+    setPublicKey(publicKey)
+    console.log(publicKey, "public Key pancho")
+    }
+
+    useEffect(() =>{
+        {address && getPublicKey()}
+    },[address])
   
   return (
     <>
@@ -24,6 +42,7 @@ export default function Home() {
       {/* <button onClick={changeTheme}>Change Theme : {theme}</button> */}
       <RegisterButton />
       <UploadFile />
+      <ListFiles />
       </>
   )
 }

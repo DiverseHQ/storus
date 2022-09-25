@@ -24,6 +24,7 @@ const RegisterButton = () => {
               params: [address],
             });
             console.log(publicKey)
+            setPublicKey(publicKey)
             const contract = connectContract();
             const tx = await contract.register(publicKey);
             await tx.wait();
@@ -36,8 +37,15 @@ const RegisterButton = () => {
     }
   return (
     <div>
-        <h1>You're Required to register</h1>
-        <button onClick={handleRegister}>Register</button>
+      {
+        isConnected && (
+          <>
+          <h1>You're Required to register</h1>
+           <button onClick={handleRegister} className="bg-blue ">Register</button>
+          </>
+        )
+      }
+        
     </div>
   )
 }

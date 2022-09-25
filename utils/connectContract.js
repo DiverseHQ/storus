@@ -2,7 +2,7 @@ import{ethers} from "ethers"
 import abiJSON from "./Storeus.json";
 
 function connectContract(){
-    const contractAddress = "0x2c588b52DCA75cc6A22e48401C356C4BAAF6a24a";
+    const contractAddress = "0x6B56E82a94276656068771C49141Bf87981D1a0F";
     const contractABI = abiJSON.abi;
     let storeusContract;
     try {
