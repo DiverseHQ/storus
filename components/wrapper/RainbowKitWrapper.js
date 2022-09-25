@@ -12,7 +12,7 @@ const { chains, provider } = configureChains(
 )
 
 const { connectors } = getDefaultWallets({
-  appName: 'DiverseHQ',
+  appName: 'Storus',
   chains
 })
 

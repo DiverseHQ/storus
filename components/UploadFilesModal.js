@@ -18,7 +18,6 @@ const UploadFilesModal = ({initialFiles}) => {
     }
 
     const getFilesSize = useCallback((files) => {
-        console.log(files)
         return convertSize(Array.from(files).map(f => f.size).reduce((a, b) => a + b, 0))
     },[])
     useEffect(() => {
@@ -26,7 +25,6 @@ const UploadFilesModal = ({initialFiles}) => {
     },[files,getFilesSize])
 
     const handleUpload = async () => {
-        console.log('handleUpload')
         setStatus('uploading')
 
         const onRootCidReady = cid => {
@@ -47,8 +45,6 @@ const UploadFilesModal = ({initialFiles}) => {
         }
     
         // makeStorageClient returns an authorized Web3.Storage client instance
-        console.log('process.evn.ALCHEMY_ID',process.env.NEXT_PUBLIC_ALCHEMY_ID)
-        console.log('process.env.WEB3_STORAGE_TOKEN',process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN)
         const client = new Web3Storage({token: process.env.NEXT_PUBLIC_WEB3_STORAGE_TOKEN})
     
         // client.put will invoke our callbacks during the upload
