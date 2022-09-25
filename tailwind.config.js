@@ -11,6 +11,7 @@ module.exports = {
           'p-bg': 'var(--background)',
           's-bg': 'var(--background-secondary)',
           't-bg': 'var(--background-pop)',
+          'h-bg': 'var(--background-hover)',
           'p-btn': 'var(--accent-primary)',
           'p-btn-hover': 'var(--accent-hover)',
           's-btn': 'var(--accent-secondary)',
