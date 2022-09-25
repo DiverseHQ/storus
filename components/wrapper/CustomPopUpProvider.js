@@ -75,13 +75,14 @@ const CustomPopUpModalProvider = ({ children }) => {
     type: 'normal',
     component: <></>,
     onAction: () => {},
-    extraaInfo: {}
+    extraaInfo: {},
+    dontHide: false
   })
 
   const providerVal = {
     modal,
-    showModal: ({ component, type, onAction = () => {}, extraaInfo = {} }) => {
-      setModal({ ...modal, visiblity: true, component, type, onAction, extraaInfo })
+    showModal: ({ component, type, onAction = () => {}, extraaInfo = {}, dontHide = false }) => {
+      setModal({ ...modal, visiblity: true, component, type, onAction, extraaInfo, dontHide })
     },
     hideModal: () => {
       setModal({ ...modal, visiblity: false, onAction: () => {} })
@@ -94,7 +95,7 @@ const CustomPopUpModalProvider = ({ children }) => {
           show={modal.visiblity}
           type={modal.type}
           component={modal.component}
-          onBackBtnClick={providerVal.hideModal}
+          onBackBtnClick={!modal.dontHide ? providerVal.hideModal : () => {}}
           top={modal.extraaInfo.top ? modal.extraaInfo.top : "auto"}
           left={modal.extraaInfo.left ? modal.extraaInfo.left : "auto"}
           bottom={modal.extraaInfo.bottom ? modal.extraaInfo.bottom : "auto"}

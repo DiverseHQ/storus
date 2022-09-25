@@ -8,6 +8,7 @@ const NewOptions = () => {
     const handleFolderUploadClick = () => {
         console.log('handleFolderUploadClick')
     }
+    
 
   return (
     <div className='flex flex-col py-2 bg-s-bg rounded-md shadow-xl w-52'>
