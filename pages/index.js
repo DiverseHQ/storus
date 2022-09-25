@@ -8,7 +8,9 @@ import {FiSettings} from 'react-icons/fi'
 import { modalType, usePopUpModal } from '../components/wrapper/CustomPopUpProvider'
 import SettingOption from '../components/SettingOption'
 
+
 export default function Home() {
+  
   return (
     <>
       <Head>
@@ -18,13 +20,10 @@ export default function Home() {
       </Head>
       <div className='flex flex-row justify-between items-center'>
         <h1 className='text-4xl'>Storus - Drive meets IPFS</h1>
-        <ConnectButton/>
       </div>
-      <button onClick={changeTheme}>Change Theme : {theme}</button>
+      {/* <button onClick={changeTheme}>Change Theme : {theme}</button> */}
       <RegisterButton />
-      <section>
-        <UploadFile />
-      </section>
+      <UploadFile />
       </>
   )
 }
