@@ -1,9 +1,9 @@
 import{ethers} from "ethers"
 import abiJSON from "./Storeus.json";
 
-function connectContract(){
-    const contractAddress = "0x6B56E82a94276656068771C49141Bf87981D1a0F";
-    const contractABI = abiJSON.abi;
+const connectContract = async () => {
+    const contractAddress = "0xb72F17860fbE8c4BC8cb9Ab0925BA8ba65df69ec";
+    const contractABI = abiJSON;
     let storeusContract;
     try {
       const { ethereum } = window;
@@ -22,4 +22,4 @@ function connectContract(){
     return storeusContract;
 }
 
-export default connectContract
+export default connectContract;
