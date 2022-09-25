@@ -12,6 +12,7 @@
     "@metadrive/lib": "^0.1.5",
     "@metamask/eth-sig-util": "^5.0.0",
     "@metamask/providers": "^9.1.0",
+    "@epnsproject/sdk-restapi": "^0.1.13",
     "@rainbow-me/rainbowkit": "^0.6.0",
     "ascii85": "^1.0.2",
     "bip39": "^3.0.4",
@@ -23,6 +24,7 @@
     "react-icons": "^4.4.0",
     "react-time-ago": "^7.2.1",
     "react-toastify": "^9.0.8",
+    "styled-components": "^5.3.5",
     "wagmi": "^0.6.6",
     "web3.storage": "^4.4.0"
   },

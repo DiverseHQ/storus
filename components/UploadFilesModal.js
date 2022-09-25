@@ -34,7 +34,6 @@ const UploadFilesModal = ({initialFiles}) => {
     }
 
     const getFilesSize = useCallback((files) => {
-        console.log(files)
         return convertSize(Array.from(files).map(f => f.size).reduce((a, b) => a + b, 0))
     },[])
     useEffect(() => {
@@ -42,7 +41,6 @@ const UploadFilesModal = ({initialFiles}) => {
     },[files,getFilesSize])
 
     const handleUpload = async () => {
-        console.log('handleUpload')
         setStatus('uploading')
 
         const onRootCidReady = cid => {
