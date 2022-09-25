@@ -11,3 +11,19 @@ export const getPublicKey = async (address) => {
       return hexStringToBuffer(publicKey);
     }
   };
+
+  export const parseFileUrl = (url)=> {
+    if (url.startsWith("ipfs://")) {
+      return {
+        ipfsCid: url.slice(7),
+      };
+    } else {
+      return null;
+    }
+  };
+
+  export const getFiles = async(address) =>{
+    const metadriveFileContract = getMetadriveFileContract();
+    const files = await metadriveFileContract.getFileKeys(address);
+    return files;
+  }

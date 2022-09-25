@@ -3,14 +3,16 @@ import React from 'react'
 import CustomPopUpModalProvider from './CustomPopUpProvider'
 import { NotifyProvider } from './NotifyContext'
 import RainbowKitWrapper from './RainbowKitWrapper'
-
+import StateProvider from "../../utils/StateContext"
 const MasterWrapper = ({ children }) => {
   return (
     <RainbowKitWrapper>
         <NotifyProvider>
             <ThemeProvider defaultTheme = 'system'>
                 <CustomPopUpModalProvider>
+                  <StateProvider>
                     {children}
+                  </StateProvider>
                 </CustomPopUpModalProvider>
             </ThemeProvider>
         </NotifyProvider>

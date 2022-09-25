@@ -8,6 +8,7 @@ import Nav from '../components/Nav'
 import NewButton from '../components/NewButton'
 import MasterWrapper from '../components/wrapper/MasterWrapper'
 import '../styles/globals.css'
+import StateProvider from "../utils/StateContext" 
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
@@ -53,6 +54,7 @@ function MyApp({ Component, pageProps }) {
         </div>
       </div> 
     </div> 
+   
     </MasterWrapper>
 }
 
